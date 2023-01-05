@@ -2,17 +2,17 @@ import { v4 as uuid } from "uuid";
 
 import AWS from "aws-sdk";
 
-// import middy from "@middy/core";
-// import httpJsonBodyParse from "@middy/http-json-body-parser";
-// import httpEventNormalizer from "@middy/http-event-normalizer";
-// import httpErrorHandler from "@middy/http-error-handler";
+import middy from "@middy/core";
+import httpJsonBodyParse from "@middy/http-json-body-parser";
+import httpEventNormalizer from "@middy/http-event-normalizer";
+import httpErrorHandler from "@middy/http-error-handler";
 
 import createError from "http-error";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function createAuction(event, context) {
-  const { title } = JSON.parse(event.body);
+  const { title } = event.body;
 
   const now = new Date();
 
@@ -30,11 +30,10 @@ async function createAuction(event, context) {
         Item: auction,
       })
       .promise();
-    
   } catch (e) {
-    console.log(e)
+    console.log(e);
 
-    throw new createError.InternalServerError(e)
+    throw new createError.InternalServerError(e);
   }
 
   return {
@@ -43,4 +42,7 @@ async function createAuction(event, context) {
   };
 }
 
-export const handler = createAuction
+export const handler = middy(createAuction)
+  .use(httpJsonBodyParse())
+  .use(httpEventNormalizer())
+  .use(httpErrorHandler());

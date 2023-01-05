@@ -10,7 +10,7 @@ plugins:
 # Defining the AWS provider.
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
