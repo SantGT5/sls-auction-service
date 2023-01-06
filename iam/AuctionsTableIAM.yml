@@ -2,5 +2,8 @@ AuctionsTableIAM:
   Effect: Allow
   Action:
     - dynamodb:PutItem
+    - dynamodb:Scan # Not recommended, just use as your last resource
+    - dynamodb:GetItem
+    - dynamodb:UpdateItem
   Resource:
     - ${self:custom.AuctionsTable.arn}
