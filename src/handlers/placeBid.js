@@ -1,6 +1,10 @@
 import AWS from "aws-sdk";
 
 import commonMiddleware from "../lib/commonMiddleware";
+import validator from "@middy/validator";
+import { transpileSchema } from "@middy/validator/transpile";
+
+import placeBidSchema from "../lib/schemas/placeBidSchema";
 
 import createError from "http-error";
 
@@ -54,4 +58,8 @@ async function placeBid(event, context) {
   };
 }
 
-export const handler = commonMiddleware(placeBid);
+export const handler = commonMiddleware(placeBid).use(
+  validator({
+    eventSchema: transpileSchema(placeBidSchema),
+  })
+);
