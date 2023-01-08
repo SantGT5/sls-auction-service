@@ -8,7 +8,7 @@ export async function closeAuction(auction) {
     Key: { id: auction.id },
     UpdateExpression: "set #status = :status",
     ExpressionAttributeValues: {
-      ":status": "CLOSE",
+      ":status": "CLOSED",
     },
     ExpressionAttributeNames: {
       "#status": "status",
