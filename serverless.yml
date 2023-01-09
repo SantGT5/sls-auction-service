@@ -16,10 +16,12 @@ provider:
   region: eu-west-1
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
+    MAIL_QUEUE_URL: ${self:custom.MailQueue.url}
   iam:
     role:
       statements:
         - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+        - ${file(iam/MailQueueIAM.yml):MailQueueIAM}
 
 # Creating & Config a DynamoDB table called AuctionsTable.
 resources:
@@ -69,5 +71,8 @@ custom:
   AuctionsTable:
     name: !Ref AuctionsTable
     arn: !GetAtt AuctionsTable.Arn
+  MailQueue:
+    arn: ${cf:sls-notification-${self:provider.stage}.MailQueueArn}
+    url: ${cf:sls-notification-${self:provider.stage}.MailQueueUrl}
   bundle:
     linting: false
